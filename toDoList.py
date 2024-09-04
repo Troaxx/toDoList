@@ -1,10 +1,11 @@
 # to-do list
 
 tasks = []
+checked_off_tasks = []
 
 
 def task_modifier():
-    option = input("Select an option: [a] - Add Task | [b] - Remove/Check off Task | [c] - Edit Task ").lower()
+    option = input("Select an option: [a] - Add Task | [b] - Remove/Check off Task | [c] - Edit Task | [d] - Undo Task").lower()
 
     if option == 'a':
         input_task = input("Enter Task Name: ")
@@ -16,6 +17,7 @@ def task_modifier():
         which_task = input("Enter name of task you'd like to check off (Case Sensitive): ")
         if which_task in tasks:
             tasks.remove(which_task)
+            checked_off_tasks.append(which_task)
             print(f"Task: '{which_task}' has been checked off! Yay!")
             return which_task
         else:
@@ -31,6 +33,19 @@ def task_modifier():
         else:
             print("Task not found. This program is case-sensitive, try again.")
 
+
+    if option == 'd':
+        select_option = input("Select an option: [a] - Undo Check (Brings task back to task-list)").lower()
+        if select_option == 'a':
+            name_of_task = input("Enter name of task (Case Sensitive)")
+            if name_of_task in checked_off_tasks:
+                index = checked_off_tasks.index(name_of_task)
+                undone_task = checked_off_tasks.pop(index)
+                tasks.append(undone_task)
+                print(f"{name_of_task} has been undone and added back to the task list.")
+            else:
+                print("Task not found, This program is case-sensitive, try again.")
+
     else:
         print("Invalid input. Please input a correct option [a/b/c]")
 
@@ -38,7 +53,11 @@ def task_modifier():
 def list_tasks():
     if tasks:
         print("Here are your tasks:")
-        for index, task in enumerate(tasks, start=1):  # start=1 to start numbering from 1
+        for index, task in enumerate(tasks, start=1):
+            print(f"{index}. {task}")
+    elif checked_off_tasks:
+        print("Checked-off tasks:")
+        for index, task in enumerate(checked_off_tasks, start=1):
             print(f"{index}. {task}")
     else:
         print("You have no tasks added yet.")
